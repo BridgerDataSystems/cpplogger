@@ -17,7 +17,7 @@ set(PROJECT_NAME cpplogger)
 # app directories
 set(APP_BOOST_DIR $ENV{BOOST_ROOT})
 set(APP_SAMPLES_DIR ./samples/)
-set(APP_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/src)
+set(APP_SOURCE_DIR ./src)
 
 message(STATUS ${APP_BOOST_DIR})
 
@@ -33,8 +33,8 @@ target_link_directories(${PROJECT_NAME} PRIVATE ${APP_BOOST_DIR}/stage/lib/)
 
 # samples
 if(APP_BUILD_SAMPLES)
-    project(sample_1 VERSION 1.0)
-    add_executable(sample_1 ${APP_SAMPLES_DIR}/sample_1.cpp)
-    target_include_directories(sample_1 PRIVATE ./src/)
-    target_link_directories(sample_1 PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/)
+    project(cpplogger_sample_1 VERSION 1.0)
+    add_executable(cpplogger_sample_1 ${APP_SAMPLES_DIR}/cpplogger_sample_1.cpp)
+    target_include_directories(cpplogger_sample_1 PRIVATE ./src/)
+    target_link_directories(cpplogger_sample_1 PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/${CMAKE_BUILD_TYPE}/)
 endif(APP_BUILD_SAMPLES)
