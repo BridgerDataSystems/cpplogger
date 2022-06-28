@@ -19,8 +19,6 @@ set(APP_BOOST_DIR $ENV{BOOST_ROOT})
 set(APP_SAMPLES_DIR ./samples/)
 set(APP_SOURCE_DIR ./src)
 
-message(STATUS ${APP_BOOST_DIR})
-
 # source files
 file(GLOB_RECURSE APP_SOURCE_FILES ${APP_SOURCE_DIR}/*.cpp)
 
