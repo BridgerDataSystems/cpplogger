@@ -27,7 +27,7 @@ namespace __N_CPPLOGGER__
         CCPPLogger(CCPPLogger&&) = default;
         CCPPLogger& operator = (const CCPPLogger&) = default;
         CCPPLogger& operator = (CCPPLogger&&) = default;
-        virtual ~CCPPLogger() = default;
+        virtual ~CCPPLogger() { this->UnInitialize(); }
 
         bool Initialize(const CPPLOGGER_INIT&) noexcept final;
         bool UnInitialize() noexcept final;

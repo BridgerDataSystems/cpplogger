@@ -33,6 +33,21 @@ namespace __N_CPPLOGGER__
 
     typedef struct __cpplogger_init
     {
+        bool enable_collect{ false };
+        bool enable_final_rotation{ false };
+        bool enable_header_footer{ false };
+
+        std::string log_folder_name{ "log" };
+        std::string log_file_prefix{ "log_"};
+        std::string log_file_extension{ ".log" };
+        std::string target_folder_name{ "log_archive" };
+
+        unsigned int rotation_size { 5 * 1024 * 1024 };
+
+        unsigned int collect_max_size { 16 * 1024 * 1024 };
+        unsigned int collect_min_free_space{ 100 * 1024 * 1024 };
+        unsigned int collect_max_files{ 512 };
+
         CPPLOGGER_SEVERITY severity =
             SEVERITY_TRACE   |
             SEVERITY_INFO    |
@@ -40,9 +55,6 @@ namespace __N_CPPLOGGER__
             SEVERITY_WARNING |
             SEVERITY_ERROR   |
             SEVERITY_FATAL;
-        std::string folder_name{ "log" };
-        std::string file_prefix{ "log_"};
-        std::string file_extension{ "log" };
     } CPPLOGGER_INIT, * LP_CPPLOGGER_INIT;
 
     class ICPPLogger

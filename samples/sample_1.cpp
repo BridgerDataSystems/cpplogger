@@ -16,7 +16,6 @@ int main() {
     auto l_pLogger = __N_CPPLOGGER__::CreateBoostLogger();
 
     __N_CPPLOGGER__::CPPLOGGER_INIT l_init{};
-    l_init.folder_name.assign("files");
     l_init.severity = __N_CPPLOGGER__::SEVERITY_TRACE | __N_CPPLOGGER__::SEVERITY_INFO | __N_CPPLOGGER__::SEVERITY_ERROR;
     if (!l_pLogger->Initialize(l_init))
     {
@@ -49,6 +48,8 @@ int main() {
         //system("pause");
         l_thread.join();
     }
+
+    __N_CPPLOGGER__::DestroyBoostLogger(&l_pLogger);
 
     return 0;
 }

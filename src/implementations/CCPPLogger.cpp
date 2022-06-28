@@ -65,30 +65,42 @@ namespace __N_CPPLOGGER__
                 << " - "    << view.attribute_values()["Message"].extract<std::string>();
         };
 
-        std::string l_strFilePath{};
-        if (!init.folder_name.empty())
-            l_strFilePath.assign(std::string{ "./" }.append(init.folder_name).append("/"));
-        else
-            l_strFilePath.assign("/logs/");
+        std::string l_strLogFolder{ init.log_folder_name };
+        l_strLogFolder.erase(std::remove(l_strLogFolder.begin(), l_strLogFolder.end(), '/'), l_strLogFolder.end());
+        l_strLogFolder.erase(std::remove(l_strLogFolder.begin(), l_strLogFolder.end(), '\\'), l_strLogFolder.end());
+        l_strLogFolder.erase(std::remove(l_strLogFolder.begin(), l_strLogFolder.end(), '.'), l_strLogFolder.end());
+        std::string l_strLogFileFormat{ l_strLogFolder + "/" + init.log_file_prefix + std::string{ "%Y-%m-%d.%2N" } + init.log_file_extension };
 
+        // sink creation
         this->m_pSink = boost::make_shared<TEXT_SINK>(
-            boost::log::keywords::file_name = std::string{ l_strFilePath.append("file_%Y-%m-%d.%2N.log") },
-            boost::log::keywords::rotation_size = 5 * 1024 * 1024,
-            boost::log::keywords::time_based_rotation = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
-            boost::log::keywords::auto_flush = true,
-            boost::log::keywords::open_mode = std::ios_base::app
+            boost::log::keywords::file_name             = l_strLogFileFormat,
+            boost::log::keywords::rotation_size         = init.rotation_size,
+            boost::log::keywords::time_based_rotation   = boost::log::sinks::file::rotation_at_time_point(0, 0, 0),
+            boost::log::keywords::scan_method           = boost::log::sinks::file::scan_matching,
+            boost::log::keywords::auto_flush            = true,
+            boost::log::keywords::enable_final_rotation = init.enable_final_rotation,
+            boost::log::keywords::open_mode             = std::ios_base::out | std::ios_base::app
         );
         
-        this->m_pSink->locked_backend()->set_file_collector(boost::log::sinks::file::make_collector(
-            boost::log::keywords::target = "collected_logs",
-            boost::log::keywords::max_size = 16 * 1024 * 1024,
-            boost::log::keywords::min_free_space = 100 * 1024 * 1024
-        ));
+        // sink collector
+        if (init.enable_collect)
+            this->m_pSink->locked_backend()->set_file_collector(boost::log::sinks::file::make_collector(
+                boost::log::keywords::target            = init.target_folder_name,
+                boost::log::keywords::max_size          = init.collect_max_size,
+                boost::log::keywords::min_free_space    = init.collect_min_free_space,
+                boost::log::keywords::max_files         = init.collect_max_files
+            ));
 
+        // sink setup
         this->m_pSink->set_filter(l_filter_lambda);
         this->m_pSink->set_formatter(l_formatter_lambda);
-        this->m_pSink->locked_backend()->set_open_handler(&write_header);
-        this->m_pSink->locked_backend()->set_close_handler(&write_footer);
+        if (init.enable_header_footer)
+        {
+            this->m_pSink->locked_backend()->set_open_handler(&write_header);
+            this->m_pSink->locked_backend()->set_close_handler(&write_footer);
+        }
+
+        // sink addition
         boost::log::core::get()->add_sink(this->m_pSink);
 
         this->m_bInitialized = true;
@@ -104,6 +116,12 @@ namespace __N_CPPLOGGER__
             this->m_strLastError.assign("CCPPLogger is NOT initialized");
             return false;
         }
+
+        boost::log::core::get()->remove_sink(this->m_pSink);
+
+        this->m_pSink->stop();
+        this->m_pSink->flush();
+        this->m_pSink.reset();
 
         this->m_bInitialized = false;
         
