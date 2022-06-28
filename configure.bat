@@ -1,0 +1,1 @@
+cmake -B ./build/ -G "Visual Studio 16 2019" -T v140_xp -A Win32 -DCMAKE_BUILD_TYPE=DEBUG -DAPP_BUILD_SAMPLES=ON
