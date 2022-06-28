@@ -5,12 +5,6 @@
 #include <thread>
 #include <chrono>
 
-void func(__N_CPPLOGGER__::ICPPLogger* pLogger)
-{
-    pLogger->log(__N_CPPLOGGER__::SEVERITY_TRACE  , "Start");
-    pLogger->log(__N_CPPLOGGER__::SEVERITY_TRACE  , "End");
-}
-
 int main() {
     
     auto l_pLogger = __N_CPPLOGGER__::CreateBoostLogger();
@@ -22,8 +16,6 @@ int main() {
         std::cout << l_pLogger->getLastError() << std::endl;
         return 1;
     }
-
-    func(l_pLogger);
 
     {
         l_pLogger->log(__N_CPPLOGGER__::SEVERITY_TRACE  , "text is: %s - %d", "text", 1);
@@ -48,8 +40,6 @@ int main() {
         //system("pause");
         l_thread.join();
     }
-
-    __N_CPPLOGGER__::DestroyBoostLogger(&l_pLogger);
 
     return 0;
 }

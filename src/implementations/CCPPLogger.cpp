@@ -160,7 +160,7 @@ namespace __N_CPPLOGGER__
         return new CCPPLogger();
     }
     
-    CPPLOGGER_API void DestroyBoostLogger(ICPPLogger** ppObj) noexcept
+    void DestroyBoostLogger(ICPPLogger** ppObj) noexcept
     {
         if(!ppObj)
             return;

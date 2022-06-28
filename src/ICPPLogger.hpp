@@ -16,7 +16,6 @@
     #pragma comment(lib, "cpplogger")
 #endif // !CPPLOGGER_EXPORTS
 
-
 #include <string>
 #include <deque>
 
