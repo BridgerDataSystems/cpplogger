@@ -31,9 +31,12 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${APP_BOOST_DIR}
 target_link_directories(${PROJECT_NAME} PRIVATE ${APP_BOOST_DIR}/stage/lib/)
 
 # samples
-if(APP_BUILD_SAMPLES)
-    project(cpplogger_sample_1 VERSION 1.0)
-    add_executable(cpplogger_sample_1 ${APP_SAMPLES_DIR}/cpplogger_sample_1.cpp)
-    target_include_directories(cpplogger_sample_1 PRIVATE ${APP_INCLUDE_DIR})
-    target_link_directories(cpplogger_sample_1 PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
-endif(APP_BUILD_SAMPLES)
+set(SAMPLE_PROJECTS cpplogger_sample_1 cpplogger_sample_2)
+foreach(SAMPLE_PROJECT ${SAMPLE_PROJECTS})
+    if(APP_BUILD_SAMPLES)
+        project(${SAMPLE_PROJECT} VERSION 1.0)
+        add_executable(${SAMPLE_PROJECT} ${APP_SAMPLES_DIR}/${SAMPLE_PROJECT}.cpp)
+        target_include_directories(${SAMPLE_PROJECT} PRIVATE ${APP_INCLUDE_DIR})
+        target_link_directories(${SAMPLE_PROJECT} PRIVATE ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+    endif(APP_BUILD_SAMPLES)
+endforeach()

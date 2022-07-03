@@ -5,8 +5,8 @@
 #include <thread>
 #include <chrono>
 
-int main() {
-    
+int main()
+{    
     auto l_pLogger = __N_CPPLOGGER__::CreateBoostLogger();
 
     __N_CPPLOGGER__::CPPLOGGER_INIT l_init{};
